@@ -1,11 +1,26 @@
+
 import mongoose from 'mongoose';
 
 export const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/workzen_db');
-    console.log(`[MongoDB] Connected: ${conn.connection.host}/${conn.connection.name}`);
+    const mongoURI = process.env.MONGODB_URI;
+
+    if (!mongoURI) {
+      throw new Error(
+        'MONGODB_URI is missing! Please configure it in Render Environment Variables.'
+      );
+    }
+
+    console.log('[MongoDB] Connecting to configured database...');
+
+    const conn = await mongoose.connect(mongoURI);
+
+    console.log(
+      `[MongoDB] Connected successfully: ${conn.connection.host}/${conn.connection.name}`
+    );
+
   } catch (error) {
-    console.error(`[MongoDB] Error: ${error.message}`);
+    console.error('[MongoDB] Connection Error:', error.message);
     process.exit(1);
   }
 };
