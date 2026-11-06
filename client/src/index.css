@@ -344,6 +344,13 @@
   }
 }
 
+button,
+input:not([type='checkbox']):not([type='radio']),
+select,
+textarea {
+  border-radius: 0.75rem;
+}
+
 @media (min-width: 640px) {
   .crm-app-shell {
     width: calc(100% - 48px);
