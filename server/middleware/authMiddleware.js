@@ -19,6 +19,9 @@ export const protect = async (req, res, next) => {
       if (!user) {
         return res.status(401).json({ success: false, message: 'User no longer exists' });
       }
+      if (user.status === 'terminated') {
+        return res.status(401).json({ success: false, message: 'This account has been terminated. Contact an administrator.' });
+      }
 
       req.user = user;
       return next();

@@ -12,6 +12,8 @@ import {
   confirmPasswordChange,
   getMe,
   getUsers,
+  terminateUser,
+  restoreUser,
   updateProfile,
 } from '../controllers/authController.js';
 import { protect, authorize } from '../middleware/authMiddleware.js';
@@ -31,5 +33,7 @@ router.post('/account/email/confirm', protect, confirmEmailChange);
 router.post('/account/password/request-code', protect, requestPasswordChangeCode);
 router.post('/account/password/confirm', protect, confirmPasswordChange);
 router.get('/users', protect, getUsers);
+router.put('/users/:userId/terminate', protect, authorize('admin'), terminateUser);
+router.put('/users/:userId/restore', protect, authorize('admin'), restoreUser);
 
 export default router;

@@ -82,8 +82,8 @@ export const Register = () => {
 
   return (
     <div className="auth-page flex min-h-screen items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
-      <div className="relative z-10 grid w-full max-w-6xl overflow-hidden rounded-[2rem] border border-white/70 bg-white/70 shadow-[0_32px_100px_rgba(27,45,31,0.12)] backdrop-blur-xl lg:grid-cols-[0.82fr_1.18fr]">
-      <aside className="relative hidden min-h-[760px] flex-col justify-between overflow-hidden bg-[#202242] p-10 text-white lg:flex">
+      <div className="auth-shell relative z-10 grid w-full max-w-6xl overflow-hidden rounded-[2rem] border border-white/70 bg-white/80 shadow-[0_32px_100px_rgba(30,41,74,0.14)] backdrop-blur-xl lg:grid-cols-[0.82fr_1.18fr]">
+      <aside className="auth-brand-panel relative hidden min-h-[760px] flex-col justify-between overflow-hidden p-10 text-white lg:flex">
         <div className="absolute -right-24 -top-20 h-80 w-80 rounded-full border border-white/10 shadow-[0_0_0_42px_rgba(255,255,255,0.025),0_0_0_92px_rgba(255,255,255,0.02)]" />
         <div className="relative">
           <Logo size="md" theme="light" />

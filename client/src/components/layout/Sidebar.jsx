@@ -83,6 +83,12 @@ export const Sidebar = ({ mobileOpen, setMobileOpen }) => {
   ];
 
   const filteredNavItems = navItems.filter((item) => item.roles.includes(role));
+  const sections = [
+    { title: 'Overview', paths: ['/dashboard'] },
+    { title: 'Tasks', paths: ['/projects', '/timesheets', '/approvals'] },
+    { title: 'Tools', paths: ['/reports', '/account'] },
+    { title: 'Metrics', paths: ['/team'] },
+  ];
 
   const getRoleBadgeStyle = (r) => {
     switch (r) {
@@ -107,68 +113,74 @@ export const Sidebar = ({ mobileOpen, setMobileOpen }) => {
 
       {/* Sidebar Container */}
       <aside
-        className={`crm-sidebar fixed top-0 bottom-0 left-0 z-50 flex w-64 flex-col border-r transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
+        className={`crm-sidebar fixed top-0 bottom-0 left-0 z-50 flex w-[196px] shrink-0 flex-col border-r transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Brand Header */}
-        <div className="crm-brand-row flex h-20 items-center justify-between px-6 border-b">
-          <Logo size="md" />
+        <div className="crm-brand-row flex h-14 items-center justify-between border-b px-4">
+          <Logo size="sm" />
         </div>
 
         {/* Navigation Links */}
-        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
-          <p className="crm-sidebar-label px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em]">
-            Your workspace
-          </p>
-          {filteredNavItems.map((item) => {
-            const Icon = item.icon;
+        <div className="flex-1 overflow-y-auto px-3 py-3">
+          {sections.map((section) => {
+            const items = filteredNavItems.filter((item) => section.paths.includes(item.to));
+            if (!items.length) return null;
             return (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                onClick={() => setMobileOpen(false)}
-                className={({ isActive }) =>
-                  `crm-nav-link flex items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all ${
-                    isActive
-                      ? 'bg-teal-500 text-white shadow-sm shadow-teal-500/20 font-semibold'
-                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-                  }`
-                }
-              >
-                <div className="flex items-center gap-3">
-                  <Icon className="h-5 w-5 shrink-0" />
-                  <span>{item.name}</span>
+              <div key={section.title} className="mb-4">
+                <p className="crm-sidebar-label px-2 py-1.5 text-[10px] font-semibold">{section.title}</p>
+                <div className="space-y-0.5">
+                  {items.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <NavLink
+                        key={item.to}
+                        to={item.to}
+                        onClick={() => setMobileOpen(false)}
+                        className={({ isActive }) =>
+                          `crm-nav-link flex items-center justify-between rounded-md px-2 py-2 text-[12px] font-medium transition-all ${
+                            isActive ? 'font-semibold' : ''
+                          }`
+                        }
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Icon className="h-3.5 w-3.5 shrink-0" />
+                          <span>{item.name === 'Timesheets' ? 'Calendar & time' : item.name}</span>
+                        </div>
+                        {item.badge ? (
+                          <span className="flex h-4 min-w-[16px] items-center justify-center rounded bg-rose-500 px-1 text-[9px] font-bold text-white">
+                            {item.badge}
+                          </span>
+                        ) : null}
+                      </NavLink>
+                    );
+                  })}
                 </div>
-                {item.badge ? (
-                  <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-amber-500 px-1.5 text-xs font-bold text-white shadow-sm animate-pulse">
-                    {item.badge}
-                  </span>
-                ) : null}
-              </NavLink>
+              </div>
             );
           })}
         </div>
 
         {/* User Card & Logout */}
-        <div className="p-4 border-t border-white/10">
-          <div className="crm-user-panel flex items-center gap-3 p-2 rounded-xl border">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-tr from-teal-500 to-indigo-600 text-white font-bold text-sm shadow-sm">
+        <div className="border-t border-slate-100 p-3">
+          <div className="crm-user-panel flex items-center gap-2 rounded-lg border p-2">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-[11px] font-bold text-indigo-700">
               {user?.name?.charAt(0) || 'A'}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="truncate text-sm font-semibold text-slate-900">
+              <p className="truncate text-[11px] font-semibold text-slate-900">
                 {user?.name || 'Administrator'}
               </p>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span
-                  className={`inline-flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-semibold uppercase border ${getRoleBadgeStyle(
+                  className={`inline-flex items-center rounded px-1 py-0.5 text-[8px] font-semibold uppercase border ${getRoleBadgeStyle(
                     role
                   )}`}
                 >
                   {role}
                 </span>
-                <span className="truncate text-[11px] text-slate-400">
+                <span className="truncate text-[9px] text-slate-400">
                   {user?.department || 'Operations'}
                 </span>
               </div>
@@ -176,7 +188,7 @@ export const Sidebar = ({ mobileOpen, setMobileOpen }) => {
             <button
               onClick={logout}
               title="Sign Out"
-              className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+              className="rounded p-1 text-slate-400 hover:bg-rose-50 hover:text-rose-600"
             >
               <LogOut className="h-4 w-4" />
             </button>

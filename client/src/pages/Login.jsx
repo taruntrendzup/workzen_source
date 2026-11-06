@@ -18,7 +18,15 @@ export const Login = () => {
   const [recoveryCodeSent, setRecoveryCodeSent] = useState(false);
   const [recoveryCode, setRecoveryCode] = useState('');
   const [recoveryNewPassword, setRecoveryNewPassword] = useState('');
+  const [showRecoveryPassword, setShowRecoveryPassword] = useState(false);
   const [recoveryMessage, setRecoveryMessage] = useState('');
+  const authStep = recoveryMode
+    ? recoveryCodeSent
+      ? 'recovery-code'
+      : 'recovery-email'
+    : verificationMode
+      ? 'verification'
+      : 'password-login';
 
   const { login, verifyEmail, resendVerification, requestRecoveryCode, loginWithRecoveryCode } = useAuth();
   const navigate = useNavigate();
@@ -109,6 +117,7 @@ export const Login = () => {
     setRecoveryCodeSent(false);
     setRecoveryCode('');
     setRecoveryNewPassword('');
+    setShowRecoveryPassword(false);
   };
 
   const handleFillDefaultAdmin = () => {
@@ -118,8 +127,8 @@ export const Login = () => {
 
   return (
     <div className="auth-page flex min-h-screen items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
-      <div className="relative z-10 grid w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/70 bg-white/70 shadow-[0_32px_100px_rgba(27,45,31,0.12)] backdrop-blur-xl lg:grid-cols-[0.9fr_1.1fr]">
-        <aside className="relative hidden min-h-[680px] flex-col justify-between overflow-hidden bg-[#202242] p-10 text-white lg:flex">
+      <div className="auth-shell relative z-10 grid w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/70 bg-white/80 shadow-[0_32px_100px_rgba(30,41,74,0.14)] backdrop-blur-xl lg:grid-cols-[0.9fr_1.1fr]">
+        <aside className="auth-brand-panel relative hidden min-h-[680px] flex-col justify-between overflow-hidden p-10 text-white lg:flex">
           <div className="absolute -right-24 -top-20 h-80 w-80 rounded-full border border-white/10 shadow-[0_0_0_42px_rgba(255,255,255,0.025),0_0_0_92px_rgba(255,255,255,0.02)]" />
           <div className="relative">
             <Logo size="md" theme="light" />
@@ -161,9 +170,10 @@ export const Login = () => {
       </div>
 
       <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="auth-card py-8 px-6 sm:px-8">
+        <div className="auth-card px-6 py-8 sm:px-8">
+          <div key={authStep} className="auth-flow-panel">
           {error && (
-            <div className="mb-4 rounded-xl bg-rose-50 border border-rose-200 p-3 text-xs text-rose-700">
+            <div role="alert" className="mb-4 rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700">
               {error}
             </div>
           )}
@@ -176,24 +186,24 @@ export const Login = () => {
                 setVerificationMessage(`Enter the code sent to ${email}, or request a new one.`);
                 setError('');
               }}
-              className="mb-4 w-full rounded-xl border border-teal-200 bg-teal-50 py-2.5 px-4 text-sm font-semibold text-teal-800 hover:bg-teal-100"
+              className="mb-4 w-full rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2.5 text-sm font-semibold text-indigo-800 hover:bg-indigo-100"
             >
               Verify this email address
             </button>
           )}
 
           {!verificationMode && !recoveryMode && (
-            <div className="mb-5 rounded-xl bg-teal-50/80 border border-teal-200/80 p-3 flex items-center justify-between">
+            <div className="mb-5 flex items-center justify-between rounded-xl border border-indigo-200/80 bg-indigo-50/80 p-3">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4 text-teal-700 shrink-0" />
-                <div className="text-[11px] text-teal-900">
+                <ShieldCheck className="h-4 w-4 shrink-0 text-indigo-700" />
+                <div className="text-[11px] text-indigo-900">
                   <span className="font-bold">Default Admin:</span> <span className="font-mono">tarunkushwaha456@gmail.com</span>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={handleFillDefaultAdmin}
-                className="text-[11px] font-bold text-teal-700 hover:text-teal-900 underline"
+                className="text-[11px] font-bold text-indigo-700 underline hover:text-indigo-900"
               >
                 Auto-fill
               </button>
@@ -225,20 +235,36 @@ export const Login = () => {
                   <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">
                     New Password <span className="normal-case font-normal">(optional)</span>
                   </label>
-                  <input
-                    type="password"
-                    minLength={6}
-                    placeholder="Leave blank to sign in without changing it"
-                    value={recoveryNewPassword}
-                    onChange={(e) => setRecoveryNewPassword(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20"
-                  />
+                  <div className="auth-password-field relative">
+                    <input
+                      type={showRecoveryPassword ? 'text' : 'password'}
+                      minLength={6}
+                      autoComplete="new-password"
+                      placeholder="Leave blank to sign in without changing it"
+                      value={recoveryNewPassword}
+                      onChange={(e) => setRecoveryNewPassword(e.target.value)}
+                      className="w-full rounded-xl border border-slate-200 px-3 py-2.5 pr-11 text-sm text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowRecoveryPassword((visible) => !visible)}
+                      aria-label={showRecoveryPassword ? 'Hide new password' : 'Show new password'}
+                      aria-pressed={showRecoveryPassword}
+                      className="absolute inset-y-0 right-0 flex items-center rounded-r-xl px-3 text-slate-400 hover:text-indigo-600 focus-visible:outline-indigo-500"
+                    >
+                      {showRecoveryPassword ? (
+                        <EyeOff className="h-4 w-4" aria-hidden="true" />
+                      ) : (
+                        <Eye className="h-4 w-4" aria-hidden="true" />
+                      )}
+                    </button>
+                  </div>
                 </div>
                 <button
                   type="button"
                   disabled={loading}
                   onClick={() => handleRecoveryLogin(false)}
-                  className="flex w-full items-center justify-center rounded-xl bg-teal-600 py-2.5 px-4 text-sm font-semibold text-white shadow-sm hover:bg-teal-700 disabled:opacity-50 transition-all"
+                  className="auth-primary-button flex w-full items-center justify-center rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-teal-700 disabled:opacity-50"
                 >
                   {loading ? 'Verifying...' : 'Sign In with Code'}
                 </button>
@@ -246,7 +272,7 @@ export const Login = () => {
                   type="button"
                   disabled={loading}
                   onClick={() => handleRecoveryLogin(true)}
-                  className="flex w-full items-center justify-center rounded-xl border border-teal-200 py-2.5 px-4 text-sm font-semibold text-teal-700 hover:bg-teal-50 disabled:opacity-50 transition-all"
+                  className="flex w-full items-center justify-center rounded-xl border border-indigo-200 px-4 py-2.5 text-sm font-semibold text-indigo-700 transition-all hover:bg-indigo-50 disabled:opacity-50"
                 >
                   Sign In and Update Password
                 </button>
@@ -254,7 +280,7 @@ export const Login = () => {
                   type="button"
                   disabled={loading}
                   onClick={handleRequestRecoveryCode}
-                  className="w-full text-center text-xs font-bold text-teal-600 hover:text-teal-700 disabled:opacity-50"
+                  className="w-full text-center text-xs font-bold text-indigo-600 hover:text-indigo-700 disabled:opacity-50"
                 >
                   Send a new code
                 </button>
@@ -362,10 +388,12 @@ export const Login = () => {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600"
+                  onClick={() => setShowPassword((visible) => !visible)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  aria-pressed={showPassword}
+                  className="absolute inset-y-0 right-0 flex items-center rounded-r-xl px-3 text-slate-400 hover:text-indigo-600"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? <EyeOff className="h-4 w-4" aria-hidden="true" /> : <Eye className="h-4 w-4" aria-hidden="true" />}
                 </button>
               </div>
             </div>
@@ -403,6 +431,7 @@ export const Login = () => {
             </button>
           </form>
           )}
+          </div>
 
           {(verificationMode || recoveryMode) && (
             <button
@@ -421,7 +450,7 @@ export const Login = () => {
 
           <p className="mt-6 text-center text-xs text-slate-500">
             Need a new workforce account?{' '}
-            <Link to="/register" className="font-bold text-teal-600 hover:text-teal-700">
+            <Link to="/register" className="font-bold text-indigo-600 hover:text-indigo-700">
               Create an account
             </Link>
           </p>

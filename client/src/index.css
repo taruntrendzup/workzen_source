@@ -1,22 +1,22 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 :root {
-  font-family: 'DM Sans', sans-serif;
+  font-family: "Righteous", sans-serif;
   color: #172033;
-  background: #f5f6fa;
+  background: #ececf1;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-optical-sizing: auto;
   font-weight: 400;
-  --app-canvas: #f5f6fa;
-  --app-ink: #172033;
+  --app-canvas: #ececf1;
+  --app-ink: #1a51c7;
   --app-muted: #737e90;
   --app-line: #e9ebf1;
-  --app-green: #4f46e5;
+  --app-green: #237ddd;
   --app-lime: #dce1ff;
   --app-shadow: 0 16px 42px rgba(34, 43, 74, 0.075);
 }
@@ -38,8 +38,8 @@
   h2,
   h3,
   h4 {
-    font-family: 'Manrope', 'DM Sans', sans-serif;
-    letter-spacing: -0.035em;
+    font-family: "Righteous", sans-serif;
+    letter-spacing: -0.025em;
   }
 
   button,
@@ -72,13 +72,16 @@
 
 @layer components {
   .crm-app-shell {
-    background: transparent;
+    background: #fff;
+    border: 1px solid #e6e6ec;
+    border-radius: 16px;
+    box-shadow: 0 22px 60px rgba(35, 38, 53, 0.1);
   }
 
   .crm-sidebar {
-    background: #fff;
+    background: #faf9fc;
     border-color: #e9ebf1;
-    box-shadow: 8px 0 30px rgba(34, 43, 74, 0.035);
+    box-shadow: none;
   }
 
   .crm-sidebar .crm-brand-row {
@@ -101,8 +104,8 @@
 
   .crm-sidebar .crm-nav-link[aria-current='page'] {
     color: #4338ca;
-    background: #eef0ff;
-    box-shadow: inset 3px 0 0 #5b52e8;
+    background: #eeeefa;
+    box-shadow: inset 2px 0 0 #5b52e8;
   }
 
   .crm-sidebar .crm-user-panel {
@@ -119,13 +122,14 @@
   }
 
   .crm-topbar {
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.96);
     border-color: #e9ebf1;
     backdrop-filter: blur(16px);
   }
 
   .crm-main {
     scrollbar-gutter: stable;
+    background: #fff;
   }
 
   .crm-page {
@@ -134,7 +138,8 @@
 
   .crm-main .bg-white:is(div, section, article) {
     border-color: #e9ebf1;
-    box-shadow: 0 4px 18px rgba(34, 43, 74, 0.035);
+    border-radius: 0.65rem;
+    box-shadow: 0 2px 8px rgba(34, 43, 74, 0.025);
     transition:
       border-color 220ms ease,
       box-shadow 260ms ease;
@@ -149,7 +154,7 @@
   .crm-main input:not([type='checkbox']):not([type='radio']),
   .crm-main select,
   .crm-main textarea {
-    border-radius: 0.9rem;
+    border-radius: 5rem;
     background-color: #fff;
     transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
   }
@@ -170,12 +175,16 @@
   }
 
   .crm-main .crm-dashboard-hero {
-    border: 1px solid #e8eaf2;
-    background:
-      radial-gradient(ellipse at 95% 0%, rgba(202, 205, 255, 0.38), transparent 24rem),
-      #fff;
+    border: 0;
+    border-bottom: 1px solid #f0f0f3;
+    border-radius: 0.25rem;
+    background: #fff;
     color: #172033;
-    box-shadow: 0 10px 32px rgba(34, 43, 74, 0.055);
+    box-shadow: none;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0.25rem;
+    padding-bottom: 1.25rem;
   }
 
   .crm-main .crm-dashboard-hero h2 {
@@ -208,19 +217,6 @@
     overflow: hidden;
   }
 
-  .crm-main .crm-stat-card::after {
-    position: absolute;
-    right: -24px;
-    bottom: -34px;
-    width: 92px;
-    height: 92px;
-    content: '';
-    border: 1px solid rgba(79, 70, 229, 0.075);
-    border-radius: 50%;
-    box-shadow: 0 0 0 14px rgba(79, 70, 229, 0.025);
-    pointer-events: none;
-  }
-
   .crm-main table thead {
     background: #f8f9fc;
   }
@@ -241,9 +237,9 @@
 
   .crm-main .crm-table-shell {
     border: 1px solid #e9ebf1;
-    border-radius: 1.15rem;
+    border-radius: 0.75rem;
     background: white;
-    box-shadow: 0 4px 18px rgba(34, 43, 74, 0.035);
+    box-shadow: 0 2px 8px rgba(34, 43, 74, 0.025);
   }
 
   .crm-main .crm-page-title {
@@ -258,8 +254,9 @@
     isolation: isolate;
     overflow: hidden;
     background:
-      radial-gradient(ellipse at 80% 10%, rgba(169, 167, 255, 0.2), transparent 33rem),
-      #f4f5fa;
+      radial-gradient(ellipse at 12% 18%, rgba(125, 131, 244, 0.15), transparent 28rem),
+      radial-gradient(ellipse at 88% 82%, rgba(117, 204, 194, 0.14), transparent 30rem),
+      #ececf1;
   }
 
   .auth-page::before,
@@ -278,6 +275,7 @@
     top: -25rem;
     right: -9rem;
     box-shadow: 0 0 0 52px rgba(79, 70, 229, 0.025), 0 0 0 108px rgba(79, 70, 229, 0.02);
+    animation: auth-orbit 30s linear infinite;
   }
 
   .auth-page::after {
@@ -286,19 +284,88 @@
     bottom: -23rem;
     left: -12rem;
     box-shadow: 0 0 0 52px rgba(79, 70, 229, 0.025);
+    animation: auth-orbit 24s linear infinite reverse;
+  }
+
+  .auth-shell {
+    animation: auth-shell-enter 720ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+    box-shadow: 0 32px 100px rgba(30, 41, 74, 0.14), 0 4px 16px rgba(30, 41, 74, 0.04);
+  }
+
+  .auth-brand-panel {
+    isolation: isolate;
+    background:
+      radial-gradient(ellipse at 95% 8%, rgba(128, 125, 244, 0.36), transparent 22rem),
+      linear-gradient(145deg, #1d2142 5%, #222852 55%, #26345a 100%);
+  }
+
+  .auth-brand-panel::after {
+    position: absolute;
+    z-index: -1;
+    right: -8rem;
+    bottom: 6rem;
+    width: 21rem;
+    height: 21rem;
+    content: '';
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    box-shadow: 0 0 0 28px rgba(255, 255, 255, 0.025), 0 0 0 58px rgba(255, 255, 255, 0.02);
+    animation: auth-orbit 36s linear infinite;
   }
 
   .auth-card {
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
+    border: 1px solid rgba(231, 234, 243, 0.82);
+    border-radius: 1.25rem;
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow: 0 16px 38px rgba(32, 42, 75, 0.065);
     animation: card-arrive 550ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+  }
+
+  .auth-flow-panel {
+    animation: auth-step-enter 340ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+    transform-origin: 50% 0%;
+  }
+
+  .auth-password-field input {
+    padding-right: 2.75rem;
+  }
+
+  .auth-primary-button {
+    box-shadow: 0 8px 18px rgba(79, 70, 229, 0.18);
+  }
+
+  .auth-primary-button:hover:not(:disabled) {
+    box-shadow: 0 11px 24px rgba(79, 70, 229, 0.24);
   }
 
   .auth-page button:not(:disabled):hover,
   .auth-page a:hover {
     transform: translateY(-1px);
+  }
+}
+
+@media (min-width: 640px) {
+  .crm-app-shell {
+    width: calc(100% - 48px);
+    height: calc(100dvh - 48px);
+    margin: 24px auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .crm-app-shell {
+    width: min(100vw, 1600px);
+    height: 100dvh;
+    padding: 3%;
+    /* margin: 10dvh auto; */
+  }
+}
+
+@media (max-width: 639px) {
+  .crm-app-shell {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
   }
 }
 
@@ -324,6 +391,36 @@
   }
 }
 
+@keyframes auth-shell-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes auth-step-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes auth-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
@@ -334,7 +431,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd0dc;
+  background: white;
   border: 2px solid transparent;
   border-radius: 9999px;
   background-clip: padding-box;

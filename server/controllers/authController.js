@@ -111,7 +111,7 @@ export const verifyEmail = async (req, res) => {
 
     const user = await User.findOne({ email: email.trim().toLowerCase() })
       .select('+emailVerificationCode +emailVerificationExpiresAt +emailVerificationAttempts');
-    if (!user || user.emailVerified || !user.emailVerificationCode ||
+    if (!user || user.status === 'terminated' || user.emailVerified || !user.emailVerificationCode ||
       !user.emailVerificationExpiresAt || user.emailVerificationExpiresAt <= new Date()) {
       return res.status(400).json({ success: false, message: 'The verification code is invalid or expired. Request a new code.' });
     }
@@ -281,6 +281,7 @@ export const requestRecoveryCode = async (req, res) => {
 
     const user = await User.findOne({
       email,
+      status: { $ne: 'terminated' },
       $or: [{ emailVerified: true }, { emailVerified: { $exists: false } }],
     }).select(ACTION_CODE_FIELDS.join(' '));
     if (user) {
@@ -320,6 +321,7 @@ export const verifyRecoveryCode = async (req, res) => {
 
     const user = await User.findOne({
       email,
+      status: { $ne: 'terminated' },
       $or: [{ emailVerified: true }, { emailVerified: { $exists: false } }],
     })
       .select(`+password ${ACTION_CODE_FIELDS.join(' ')}`);
@@ -490,6 +492,9 @@ export const login = async (req, res) => {
     if (!user) {
       return res.status(401).json({ success: false, message: 'Invalid email or password' });
     }
+    if (user.status === 'terminated') {
+      return res.status(403).json({ success: false, message: 'This account has been terminated. Contact an administrator.' });
+    }
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
@@ -551,13 +556,81 @@ export const getMe = async (req, res) => {
 export const getUsers = async (req, res) => {
   try {
     const { role } = req.query;
-    const filter = {};
+    const requestedStatus = req.query.status;
+    if (requestedStatus === 'terminated' && req.user.role !== 'admin') {
+      return res.status(403).json({ success: false, message: 'Only administrators can view terminated team records.' });
+    }
+
+    const filter = requestedStatus === 'terminated'
+      ? { status: 'terminated' }
+      : { status: { $ne: 'terminated' } };
     if (role) filter.role = role;
 
-    const users = await User.find(filter).select('-password').sort({ name: 1 });
+    const users = await User.find(filter)
+      .select('-password')
+      .populate('terminatedBy', 'name')
+      .sort({ name: 1 });
     res.json({ success: true, count: users.length, users });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const terminateUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId).select(ACTION_CODE_FIELDS.join(' '));
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'Team member not found.' });
+    }
+    if (!['manager', 'employee'].includes(user.role)) {
+      return res.status(400).json({ success: false, message: 'Only managers and employees can be terminated here.' });
+    }
+    if (user.status === 'terminated') {
+      return res.status(409).json({ success: false, message: 'This team member is already terminated.' });
+    }
+
+    user.status = 'terminated';
+    user.terminatedAt = new Date();
+    user.terminatedBy = req.user.id;
+    user.recoveryCode = undefined;
+    user.recoveryCodeExpiresAt = undefined;
+    user.recoveryCodeAttempts = 0;
+    user.accountCode = undefined;
+    user.accountCodeExpiresAt = undefined;
+    user.accountCodeAttempts = 0;
+    user.accountCodePurpose = undefined;
+    user.pendingEmail = undefined;
+    await user.save();
+
+    res.json({ success: true, message: `${user.name} was terminated and moved to the terminated records.` });
+  } catch (error) {
+    console.error('Team member termination error:', error);
+    res.status(500).json({ success: false, message: 'Unable to terminate this team member.' });
+  }
+};
+
+export const restoreUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'Team member not found.' });
+    }
+    if (!['manager', 'employee'].includes(user.role)) {
+      return res.status(400).json({ success: false, message: 'Only terminated managers and employees can be restored here.' });
+    }
+    if (user.status !== 'terminated') {
+      return res.status(409).json({ success: false, message: 'This team member is not terminated.' });
+    }
+
+    user.status = 'active';
+    user.terminatedAt = null;
+    user.terminatedBy = null;
+    await user.save();
+
+    res.json({ success: true, message: `${user.name} was restored to the active team.` });
+  } catch (error) {
+    console.error('Team member restoration error:', error);
+    res.status(500).json({ success: false, message: 'Unable to restore this team member.' });
   }
 };
 

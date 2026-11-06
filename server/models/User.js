@@ -112,8 +112,17 @@ const userSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['active', 'inactive'],
+      enum: ['active', 'inactive', 'terminated'],
       default: 'active',
+    },
+    terminatedAt: {
+      type: Date,
+      default: null,
+    },
+    terminatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
     },
   },
   {

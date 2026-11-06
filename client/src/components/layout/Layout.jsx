@@ -10,18 +10,18 @@ export const Layout = () => {
   const location = useLocation();
 
   return (
-    <div className="crm-app-shell flex h-screen overflow-hidden">
+    <div className="crm-app-shell mx-auto flex h-screen w-full overflow-hidden">
       {/* Sidebar Navigation */}
       <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
 
       {/* Main Content Area */}
-      <div className="flex flex-1 flex-col overflow-y-auto">
+      <div className="flex min-w-0 flex-1 flex-col overflow-y-auto">
         <Navbar
           setMobileOpen={setMobileOpen}
           onOpenLogModal={() => setLogModalOpen(true)}
         />
 
-        <main className="crm-main flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+        <main className="crm-main mx-auto w-full max-w-[1600px] flex-1 p-4 sm:p-5 lg:p-6">
           <div key={location.pathname} className="crm-page">
             <Outlet context={{ openLogModal: () => setLogModalOpen(true) }} />
           </div>

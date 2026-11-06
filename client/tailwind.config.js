@@ -37,8 +37,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['DM Sans', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-        display: ['Manrope', 'DM Sans', 'system-ui', 'sans-serif'],
+        sans: ['Roboto', 'Arial', 'sans-serif'],
+        display: ['Roboto', 'Arial', 'sans-serif'],
       },
     },
   },
