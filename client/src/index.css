@@ -2,38 +2,374 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  font-family: 'DM Sans', sans-serif;
+  color: #172033;
+  background: #f5f6fa;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  --app-canvas: #f5f6fa;
+  --app-ink: #172033;
+  --app-muted: #737e90;
+  --app-line: #e9ebf1;
+  --app-green: #4f46e5;
+  --app-lime: #dce1ff;
+  --app-shadow: 0 16px 42px rgba(34, 43, 74, 0.075);
+}
+
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-slate-50 text-slate-900 antialiased selection:bg-teal-500 selection:text-white font-sans;
+    @apply antialiased font-sans;
+    min-width: 320px;
+    min-height: 100vh;
+    color: var(--app-ink);
+    background: var(--app-canvas);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: 'Manrope', 'DM Sans', sans-serif;
+    letter-spacing: -0.035em;
+  }
+
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button,
+  a {
+    transition:
+      color 180ms ease,
+      background-color 180ms ease,
+      border-color 180ms ease,
+      box-shadow 220ms ease,
+      transform 220ms cubic-bezier(0.2, 0.75, 0.25, 1);
+  }
+
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 3px solid rgba(91, 82, 232, 0.42);
+    outline-offset: 3px;
   }
 }
 
-/* Custom scrollbars */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+@layer components {
+  .crm-app-shell {
+    background: transparent;
+  }
+
+  .crm-sidebar {
+    background: #fff;
+    border-color: #e9ebf1;
+    box-shadow: 8px 0 30px rgba(34, 43, 74, 0.035);
+  }
+
+  .crm-sidebar .crm-brand-row {
+    border-color: #eef0f4;
+  }
+
+  .crm-sidebar .crm-sidebar-label {
+    color: #9aa2b1;
+  }
+
+  .crm-sidebar .crm-nav-link {
+    color: #667085;
+  }
+
+  .crm-sidebar .crm-nav-link:hover {
+    color: #4338ca;
+    background: #f5f6ff;
+    transform: translateX(2px);
+  }
+
+  .crm-sidebar .crm-nav-link[aria-current='page'] {
+    color: #4338ca;
+    background: #eef0ff;
+    box-shadow: inset 3px 0 0 #5b52e8;
+  }
+
+  .crm-sidebar .crm-user-panel {
+    background: #f8f9fc;
+    border-color: #eceef3;
+  }
+
+  .crm-sidebar .crm-user-panel .text-slate-900 {
+    color: #172033;
+  }
+
+  .crm-sidebar .crm-user-panel .text-slate-400 {
+    color: #8992a2;
+  }
+
+  .crm-topbar {
+    background: rgba(255, 255, 255, 0.92);
+    border-color: #e9ebf1;
+    backdrop-filter: blur(16px);
+  }
+
+  .crm-main {
+    scrollbar-gutter: stable;
+  }
+
+  .crm-page {
+    animation: page-arrive 460ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+  }
+
+  .crm-main .bg-white:is(div, section, article) {
+    border-color: #e9ebf1;
+    box-shadow: 0 4px 18px rgba(34, 43, 74, 0.035);
+    transition:
+      border-color 220ms ease,
+      box-shadow 260ms ease;
+  }
+
+  .crm-main .crm-stat-card:hover,
+  .crm-main .crm-table-shell:hover {
+    border-color: #dfe2ec;
+    box-shadow: 0 10px 26px rgba(34, 43, 74, 0.06);
+  }
+
+  .crm-main input:not([type='checkbox']):not([type='radio']),
+  .crm-main select,
+  .crm-main textarea {
+    border-radius: 0.9rem;
+    background-color: #fff;
+    transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+  }
+
+  .crm-main input:not([type='checkbox']):not([type='radio']):focus,
+  .crm-main select:focus,
+  .crm-main textarea:focus {
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(91, 82, 232, 0.11);
+  }
+
+  .crm-main button:not(:disabled):hover {
+    transform: translateY(-1px);
+  }
+
+  .crm-main button:active {
+    transform: translateY(0) scale(0.985);
+  }
+
+  .crm-main .crm-dashboard-hero {
+    border: 1px solid #e8eaf2;
+    background:
+      radial-gradient(ellipse at 95% 0%, rgba(202, 205, 255, 0.38), transparent 24rem),
+      #fff;
+    color: #172033;
+    box-shadow: 0 10px 32px rgba(34, 43, 74, 0.055);
+  }
+
+  .crm-main .crm-dashboard-hero h2 {
+    color: #172033;
+  }
+
+  .crm-main .crm-dashboard-hero p {
+    color: #737e90;
+  }
+
+  .crm-main .crm-dashboard-hero .crm-hero-kicker {
+    color: #5148d7;
+    background: #f0f1ff;
+    border: 1px solid #e3e5ff;
+  }
+
+  .crm-main .crm-dashboard-hero .crm-hero-secondary {
+    color: #4c5568;
+    background: white;
+    border: 1px solid #e5e7ee;
+  }
+
+  .crm-main .crm-dashboard-hero .crm-hero-primary {
+    color: white;
+    background: #5148d7;
+  }
+
+  .crm-main .crm-stat-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .crm-main .crm-stat-card::after {
+    position: absolute;
+    right: -24px;
+    bottom: -34px;
+    width: 92px;
+    height: 92px;
+    content: '';
+    border: 1px solid rgba(79, 70, 229, 0.075);
+    border-radius: 50%;
+    box-shadow: 0 0 0 14px rgba(79, 70, 229, 0.025);
+    pointer-events: none;
+  }
+
+  .crm-main table thead {
+    background: #f8f9fc;
+  }
+
+  .crm-main table thead th {
+    color: #7a8495;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+  }
+
+  .crm-main table tbody tr {
+    transition: background-color 160ms ease;
+  }
+
+  .crm-main table tbody tr:hover {
+    background: #f8f9ff;
+  }
+
+  .crm-main .crm-table-shell {
+    border: 1px solid #e9ebf1;
+    border-radius: 1.15rem;
+    background: white;
+    box-shadow: 0 4px 18px rgba(34, 43, 74, 0.035);
+  }
+
+  .crm-main .crm-page-title {
+    font-size: clamp(1.65rem, 3vw, 2rem);
+    line-height: 1.15;
+    font-weight: 750;
+    color: #172033;
+  }
+
+  .auth-page {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 80% 10%, rgba(169, 167, 255, 0.2), transparent 33rem),
+      #f4f5fa;
+  }
+
+  .auth-page::before,
+  .auth-page::after {
+    position: absolute;
+    z-index: -1;
+    content: '';
+    pointer-events: none;
+    border: 1px solid rgba(79, 70, 229, 0.08);
+    border-radius: 50%;
+  }
+
+  .auth-page::before {
+    width: 38rem;
+    height: 38rem;
+    top: -25rem;
+    right: -9rem;
+    box-shadow: 0 0 0 52px rgba(79, 70, 229, 0.025), 0 0 0 108px rgba(79, 70, 229, 0.02);
+  }
+
+  .auth-page::after {
+    width: 28rem;
+    height: 28rem;
+    bottom: -23rem;
+    left: -12rem;
+    box-shadow: 0 0 0 52px rgba(79, 70, 229, 0.025);
+  }
+
+  .auth-card {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    animation: card-arrive 550ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+  }
+
+  .auth-page button:not(:disabled):hover,
+  .auth-page a:hover {
+    transform: translateY(-1px);
+  }
 }
+
+@keyframes page-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes card-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #cbd0dc;
+  border: 2px solid transparent;
   border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background-clip: padding-box;
 }
 
-/* Print styles for Reports */
+::-webkit-scrollbar-thumb:hover {
+  background: #9ba3b4;
+  background-clip: padding-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @media print {
-  aside, nav, .no-print, button {
+  aside,
+  nav,
+  .no-print,
+  button {
     display: none !important;
   }
+
   main {
     margin: 0 !important;
     padding: 0 !important;
     width: 100% !important;
   }
+
   .print-page {
     box-shadow: none !important;
     border: none !important;

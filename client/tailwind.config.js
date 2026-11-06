@@ -7,6 +7,18 @@ export default {
   theme: {
     extend: {
       colors: {
+        teal: {
+          50: '#f2f3ff',
+          100: '#e7e8ff',
+          200: '#d3d5ff',
+          300: '#b7baff',
+          400: '#9494ff',
+          500: '#7168f3',
+          600: '#554be1',
+          700: '#483bc7',
+          800: '#3d34a2',
+          900: '#342f80',
+        },
         zenith: {
           50: '#f0fdf9',
           100: '#ccfbf1',
@@ -25,7 +37,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans: ['DM Sans', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        display: ['Manrope', 'DM Sans', 'system-ui', 'sans-serif'],
       },
     },
   },

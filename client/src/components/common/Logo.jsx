@@ -27,12 +27,12 @@ export const Logo = ({ size = 'md', showWordmark = true, className = '', theme =
         >
           <defs>
             <linearGradient id="zenGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#0d9488" />
-              <stop offset="50%" stopColor="#14b8a6" />
-              <stop offset="100%" stopColor="#3b82f6" />
+              <stop offset="0%" stopColor="#9694ff" />
+              <stop offset="50%" stopColor="#cfceff" />
+              <stop offset="100%" stopColor="#5148d7" />
             </linearGradient>
             <radialGradient id="ambient" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.3" />
+              <stop offset="0%" stopColor="#9694ff" stopOpacity="0.3" />
               <stop offset="100%" stopColor="#0f172a" stopOpacity="0" />
             </radialGradient>
           </defs>
@@ -50,7 +50,7 @@ export const Logo = ({ size = 'md', showWordmark = true, className = '', theme =
           />
 
           {/* Calming Mindfulness Accent node */}
-          <circle cx="22" cy="28" r="4.5" fill="#38bdf8" />
+          <circle cx="22" cy="28" r="4.5" fill="#b9b7ff" />
 
           {/* Clock Hands: Hour hand pointing upwards (zen focus) & Minute hand pointing to balance */}
           <line
@@ -67,7 +67,7 @@ export const Logo = ({ size = 'md', showWordmark = true, className = '', theme =
             y1="50"
             x2="68"
             y2="50"
-            stroke="#2dd4bf"
+            stroke="#aaa7ff"
             strokeWidth="5"
             strokeLinecap="round"
           />
@@ -81,14 +81,14 @@ export const Logo = ({ size = 'md', showWordmark = true, className = '', theme =
       {showWordmark && (
         <div className="flex flex-col leading-none">
           <span
-            className={`font-extrabold tracking-tight ${text} ${
-              theme === 'light' ? 'text-slate-900' : 'text-slate-900'
+            className={`font-extrabold tracking-tight font-display ${text} ${
+              theme === 'light' ? 'text-white' : 'text-slate-900'
             }`}
           >
-            Work<span className="text-teal-600">zen</span>
+            Work            <span className={theme === 'light' ? 'text-[#c8de69]' : 'text-indigo-600'}>zen</span>
           </span>
           <span
-            className={`font-medium uppercase tracking-widest text-slate-400 ${sub} mt-0.5`}
+            className={`font-medium uppercase tracking-widest ${theme === 'light' ? 'text-slate-400' : 'text-slate-400'} ${sub} mt-0.5`}
           >
             Workforce • Balance
           </span>

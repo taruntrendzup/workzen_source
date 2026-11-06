@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
   Briefcase,
@@ -8,10 +8,7 @@ import {
   BarChart3,
   Users,
   LogOut,
-  ChevronRight,
-  ShieldCheck,
-  UserCheck,
-  UserCircle,
+  Settings,
 } from 'lucide-react';
 import { Logo } from '../common/Logo';
 import { useAuth } from '../../context/AuthContext';
@@ -19,7 +16,6 @@ import api from '../../services/api';
 
 export const Sidebar = ({ mobileOpen, setMobileOpen }) => {
   const { user, logout, role } = useAuth();
-  const navigate = useNavigate();
   const [pendingCount, setPendingCount] = useState(0);
 
   useEffect(() => {
@@ -30,7 +26,7 @@ export const Sidebar = ({ mobileOpen, setMobileOpen }) => {
           if (res.data.success) {
             setPendingCount(res.data.count || 0);
           }
-        } catch (e) {
+        } catch {
           // ignore
         }
       };
@@ -73,6 +69,12 @@ export const Sidebar = ({ mobileOpen, setMobileOpen }) => {
       roles: ['admin', 'manager', 'employee'],
     },
     {
+      name: 'Account Settings',
+      to: '/account',
+      icon: Settings,
+      roles: ['admin', 'manager', 'employee'],
+    },
+    {
       name: 'Team Directory',
       to: '/team',
       icon: Users,
@@ -105,19 +107,19 @@ export const Sidebar = ({ mobileOpen, setMobileOpen }) => {
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 flex w-72 flex-col border-r border-slate-200 bg-white transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
+        className={`crm-sidebar fixed top-0 bottom-0 left-0 z-50 flex w-64 flex-col border-r transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Brand Header */}
-        <div className="flex h-20 items-center justify-between px-6 border-b border-slate-100">
+        <div className="crm-brand-row flex h-20 items-center justify-between px-6 border-b">
           <Logo size="md" />
         </div>
 
         {/* Navigation Links */}
         <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
-          <p className="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-            Workforce Portal
+          <p className="crm-sidebar-label px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em]">
+            Your workspace
           </p>
           {filteredNavItems.map((item) => {
             const Icon = item.icon;
@@ -127,7 +129,7 @@ export const Sidebar = ({ mobileOpen, setMobileOpen }) => {
                 to={item.to}
                 onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
-                  `flex items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all ${
+                  `crm-nav-link flex items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all ${
                     isActive
                       ? 'bg-teal-500 text-white shadow-sm shadow-teal-500/20 font-semibold'
                       : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
@@ -149,8 +151,8 @@ export const Sidebar = ({ mobileOpen, setMobileOpen }) => {
         </div>
 
         {/* User Card & Logout */}
-        <div className="p-4 border-t border-slate-100 bg-slate-50/50">
-          <div className="flex items-center gap-3 p-2 rounded-xl bg-white border border-slate-200 shadow-sm">
+        <div className="p-4 border-t border-white/10">
+          <div className="crm-user-panel flex items-center gap-3 p-2 rounded-xl border">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-tr from-teal-500 to-indigo-600 text-white font-bold text-sm shadow-sm">
               {user?.name?.charAt(0) || 'A'}
             </div>

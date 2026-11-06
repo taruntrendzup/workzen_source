@@ -47,21 +47,90 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const completeLogin = (res) => {
+    const { token: newToken, user: userData } = res.data;
+    localStorage.setItem('workzen_token', newToken);
+    localStorage.setItem('workzen_user', JSON.stringify(userData));
+    setToken(newToken);
+    setUser(userData);
+  };
+
+  const requestRecoveryCode = async (email) => {
+    try {
+      const res = await api.post('/auth/recovery/request-code', { email });
+      return { success: true, message: res.data.message };
+    } catch (err) {
+      return {
+        success: false,
+        message: err.response?.data?.message || 'Unable to send a sign-in code.',
+      };
+    }
+  };
+
+  const loginWithRecoveryCode = async (email, code, newPassword) => {
+    try {
+      const res = await api.post('/auth/recovery/verify-code', {
+        email,
+        code,
+        ...(newPassword ? { newPassword } : {}),
+      });
+      if (res.data.success) {
+        completeLogin(res);
+        return { success: true };
+      }
+      return { success: false, message: 'Unable to verify sign-in code.' };
+    } catch (err) {
+      return {
+        success: false,
+        message: err.response?.data?.message || 'Unable to verify sign-in code.',
+      };
+    }
+  };
+
   const register = async (userData) => {
     try {
       const res = await api.post('/auth/register', userData);
       if (res.data.success) {
-        const { token: newToken, user: newUser } = res.data;
-        localStorage.setItem('workzen_token', newToken);
-        localStorage.setItem('workzen_user', JSON.stringify(newUser));
-        setToken(newToken);
-        setUser(newUser);
-        return { success: true };
+        return { success: true, verificationRequired: res.data.verificationRequired, email: res.data.email };
       }
+      return { success: false, message: 'Registration failed.' };
     } catch (err) {
       return {
         success: false,
         message: err.response?.data?.message || 'Registration failed.',
+        email: err.response?.data?.email,
+      };
+    }
+  };
+
+  const verifyEmail = async (email, code) => {
+    try {
+      const res = await api.post('/auth/verify-email', { email, code });
+      if (res.data.success) {
+        const { token: newToken, user: userData } = res.data;
+        localStorage.setItem('workzen_token', newToken);
+        localStorage.setItem('workzen_user', JSON.stringify(userData));
+        setToken(newToken);
+        setUser(userData);
+        return { success: true };
+      }
+      return { success: false, message: 'Email verification failed.' };
+    } catch (err) {
+      return {
+        success: false,
+        message: err.response?.data?.message || 'Email verification failed. Please try again.',
+      };
+    }
+  };
+
+  const resendVerification = async (email) => {
+    try {
+      const res = await api.post('/auth/resend-verification', { email });
+      return { success: res.data.success, message: res.data.message };
+    } catch (err) {
+      return {
+        success: false,
+        message: err.response?.data?.message || 'Unable to resend the code. Please try again.',
       };
     }
   };
@@ -81,7 +150,11 @@ export const AuthProvider = ({ children }) => {
         loading,
         role: user?.role || 'guest',
         login,
+        requestRecoveryCode,
+        loginWithRecoveryCode,
         register,
+        verifyEmail,
+        resendVerification,
         logout,
         setUser,
       }}

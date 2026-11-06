@@ -16,6 +16,71 @@ const userSchema = new mongoose.Schema(
       trim: true,
       match: [/\S+@\S+\.\S+/, 'Please provide a valid email'],
     },
+    emailVerified: {
+      type: Boolean,
+      default: true,
+    },
+    emailVerificationCode: {
+      type: String,
+      select: false,
+    },
+    emailVerificationExpiresAt: {
+      type: Date,
+      select: false,
+    },
+    emailVerificationLastSentAt: {
+      type: Date,
+      select: false,
+    },
+    emailVerificationAttempts: {
+      type: Number,
+      default: 0,
+      select: false,
+    },
+    recoveryCode: {
+      type: String,
+      select: false,
+    },
+    recoveryCodeExpiresAt: {
+      type: Date,
+      select: false,
+    },
+    recoveryCodeLastSentAt: {
+      type: Date,
+      select: false,
+    },
+    recoveryCodeAttempts: {
+      type: Number,
+      default: 0,
+      select: false,
+    },
+    accountCode: {
+      type: String,
+      select: false,
+    },
+    accountCodeExpiresAt: {
+      type: Date,
+      select: false,
+    },
+    accountCodeLastSentAt: {
+      type: Date,
+      select: false,
+    },
+    accountCodeAttempts: {
+      type: Number,
+      default: 0,
+      select: false,
+    },
+    accountCodePurpose: {
+      type: String,
+      select: false,
+    },
+    pendingEmail: {
+      type: String,
+      select: false,
+      lowercase: true,
+      trim: true,
+    },
     password: {
       type: String,
       required: [true, 'Please provide a password'],

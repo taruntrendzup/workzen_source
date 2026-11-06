@@ -99,26 +99,26 @@ export const Dashboard = () => {
     return (
       <div className="space-y-6">
         {/* Top Header Banner */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-slate-900 via-slate-800 to-teal-950 p-6 rounded-3xl text-white shadow-xl shadow-slate-900/10">
+        <div className="crm-dashboard-hero flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl">
           <div>
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-semibold mb-2 ring-1 ring-teal-500/30">
+            <div className="crm-hero-kicker inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-semibold mb-2">
               <ShieldCheck className="h-3.5 w-3.5" /> Administrator Operations Center
             </div>
             <h2 className="text-2xl font-black tracking-tight">Organization Snapshot</h2>
-            <p className="text-xs text-slate-300 mt-1 max-w-xl">
+            <p className="text-xs mt-1 max-w-xl">
               Live telemetry on timesheet submissions, ongoing projects, billable ratios, and team utilization.
             </p>
           </div>
           <div className="flex items-center gap-3">
             <Link
               to="/reports"
-              className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold backdrop-blur transition-all"
+              className="crm-hero-secondary px-4 py-2.5 rounded-xl text-xs font-bold transition-all"
             >
               Executive Report
             </Link>
             <button
               onClick={openLogModal}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-extrabold shadow-lg shadow-teal-500/25 transition-all"
+              className="crm-hero-primary flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-extrabold shadow-sm transition-all"
             >
               <Plus className="h-4 w-4" /> Log Hours
             </button>
@@ -210,8 +210,8 @@ export const Dashboard = () => {
                   <AreaChart data={dailyTrend}>
                     <defs>
                       <linearGradient id="hourGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#14b8a6" stopOpacity={0.4} />
-                        <stop offset="95%" stopColor="#14b8a6" stopOpacity={0} />
+                        <stop offset="5%" stopColor="#7168f3" stopOpacity={0.34} />
+                        <stop offset="95%" stopColor="#7168f3" stopOpacity={0} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
@@ -230,7 +230,7 @@ export const Dashboard = () => {
                       type="monotone"
                       dataKey="totalHours"
                       name="Logged Hours"
-                      stroke="#0d9488"
+                      stroke="#554be1"
                       strokeWidth={2.5}
                       fillOpacity={1}
                       fill="url(#hourGrad)"
@@ -359,20 +359,20 @@ export const Dashboard = () => {
     return (
       <div className="space-y-6">
         {/* Manager Header Banner */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-blue-950 via-slate-900 to-teal-900 p-6 rounded-3xl text-white shadow-xl">
+        <div className="crm-dashboard-hero flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl">
           <div>
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-semibold mb-2 ring-1 ring-blue-500/30">
+            <div className="crm-hero-kicker inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-semibold mb-2">
               <UserCheck className="h-3.5 w-3.5" /> Project Manager Dashboard
             </div>
             <h2 className="text-2xl font-black tracking-tight">Team Operations & Timesheet Review</h2>
-            <p className="text-xs text-slate-300 mt-1 max-w-xl">
+            <p className="text-xs mt-1 max-w-xl">
               Monitor deliverable progress, track team workloads, and conduct prompt approvals.
             </p>
           </div>
           <div className="flex items-center gap-3">
             <Link
               to="/approvals"
-              className="px-4 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-extrabold shadow-lg transition-all"
+              className="crm-hero-primary px-4 py-2.5 rounded-xl text-xs font-extrabold shadow-sm transition-all"
             >
               Review Timesheets ({stats.pendingApprovals || 0})
             </Link>
@@ -508,20 +508,20 @@ export const Dashboard = () => {
   return (
     <div className="space-y-6">
       {/* Employee Greeting Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-teal-900 via-slate-900 to-indigo-950 p-6 rounded-3xl text-white shadow-xl">
+      <div className="crm-dashboard-hero flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl">
         <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-semibold mb-2 ring-1 ring-teal-500/30">
+          <div className="crm-hero-kicker inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-semibold mb-2">
             <Clock className="h-3.5 w-3.5" /> Workzen Daily Workspace
           </div>
           <h2 className="text-2xl font-black tracking-tight">Track Your Productivity & Impact</h2>
-          <p className="text-xs text-slate-300 mt-1 max-w-xl">
+          <p className="text-xs mt-1 max-w-xl">
             Keep your hours up to date, check manager review statuses, and stay on top of sprint deliverables.
           </p>
         </div>
         <div>
           <button
             onClick={openLogModal}
-            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 text-sm font-extrabold shadow-lg shadow-teal-500/30 active:scale-95 transition-all"
+            className="crm-hero-primary flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-extrabold shadow-sm active:scale-95 transition-all"
           >
             <Plus className="h-4 w-4" /> Log Work Hours
           </button>

@@ -12,6 +12,7 @@ import { Timesheets } from './pages/Timesheets';
 import { Approvals } from './pages/Approvals';
 import { Reports } from './pages/Reports';
 import { Team } from './pages/Team';
+import { AccountSettings } from './pages/AccountSettings';
 
 export function App() {
   return (
@@ -27,6 +28,7 @@ export function App() {
             <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/account" element={<AccountSettings />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/timesheets" element={<Timesheets />} />
               <Route path="/reports" element={<Reports />} />

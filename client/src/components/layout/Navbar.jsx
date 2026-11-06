@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, Bell, Plus, CheckCircle2, AlertCircle, Clock, Check } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Menu, Bell, Plus, CheckCircle2, AlertCircle, Clock, Check, ArrowUpRight } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 
@@ -50,7 +51,7 @@ export const Navbar = ({ setMobileOpen, onOpenLogModal }) => {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-20 w-full items-center justify-between border-b border-slate-200 bg-white/95 px-4 backdrop-blur sm:px-8">
+    <header className="crm-topbar sticky top-0 z-30 flex h-20 w-full items-center justify-between border-b px-4 sm:px-8">
       {/* Left side: Hamburger (mobile) + Greeting */}
       <div className="flex items-center gap-4">
         <button
@@ -60,7 +61,8 @@ export const Navbar = ({ setMobileOpen, onOpenLogModal }) => {
           <Menu className="h-6 w-6" />
         </button>
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900">
+          <p className="mb-0.5 text-[10px] font-bold uppercase tracking-[0.18em] text-indigo-600">Workzen / Workspace</p>
+          <h1 className="font-display text-xl font-bold tracking-tight text-slate-900">
             Welcome back, {user?.name?.split(' ')[0] || 'Member'}
           </h1>
           <p className="text-xs text-slate-500 hidden sm:block">
@@ -161,9 +163,14 @@ export const Navbar = ({ setMobileOpen, onOpenLogModal }) => {
 
         {/* User Mini Badge */}
         <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
-          <div className="h-9 w-9 rounded-full bg-slate-900 text-teal-300 font-bold flex items-center justify-center text-sm ring-2 ring-slate-100">
+          <Link
+            to="/account"
+            aria-label="Open account settings"
+            className="group relative flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50 text-sm font-bold text-indigo-700 ring-2 ring-white shadow-sm hover:shadow-md"
+          >
             {user?.name?.charAt(0) || 'U'}
-          </div>
+            <ArrowUpRight className="absolute -right-1 -top-1 h-3.5 w-3.5 rounded-full bg-white p-0.5 text-teal-700 opacity-0 shadow transition-opacity group-hover:opacity-100" />
+          </Link>
         </div>
       </div>
     </header>
