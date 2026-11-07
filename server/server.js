@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 import { connectDB } from './config/db.js';
 import { User } from './models/User.js';
 import { initDefaultAdmin } from './utils/initProduction.js';
+import { isEmailVerificationConfigured } from './utils/emailVerification.js';
 
 import authRoutes from './routes/authRoutes.js';
 import projectRoutes from './routes/projectRoutes.js';
@@ -62,6 +63,7 @@ app.get('/api/health', (req, res) => {
     status: 'online',
     platform: 'Workzen Workforce Platform',
     environment: process.env.NODE_ENV || 'production',
+    emailVerificationConfigured: isEmailVerificationConfigured(),
     timestamp: new Date().toISOString(),
   });
 });

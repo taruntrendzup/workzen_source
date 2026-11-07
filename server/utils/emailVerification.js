@@ -3,6 +3,29 @@ import nodemailer from 'nodemailer';
 
 const CODE_EXPIRATION_MINUTES = 10;
 
+const getEmailSettings = () => {
+  const SMTP_HOST = (process.env.SMTP_HOST || 'smtp.gmail.com').trim();
+  const SMTP_PORT = (process.env.SMTP_PORT || '465').trim();
+  const SMTP_SECURE = (process.env.SMTP_SECURE || 'true').trim().toLowerCase() === 'true';
+  const SMTP_USER = process.env.SMTP_USER?.trim();
+  const SMTP_PASS = process.env.SMTP_PASS?.replace(/\s/g, '');
+  const EMAIL_FROM = process.env.EMAIL_FROM?.trim() || SMTP_USER;
+
+  const missingSettings = [
+    !SMTP_USER && 'SMTP_USER',
+    !SMTP_PASS && 'SMTP_PASS',
+    !EMAIL_FROM && 'EMAIL_FROM (or SMTP_USER)',
+  ].filter(Boolean);
+
+  return {
+    settings: { SMTP_HOST, SMTP_PORT: Number(SMTP_PORT), SMTP_SECURE, SMTP_USER, SMTP_PASS, EMAIL_FROM },
+    missingSettings,
+  };
+};
+
+export const isEmailVerificationConfigured = () =>
+  getEmailSettings().missingSettings.length === 0;
+
 export const createEmailVerificationCode = () => ({
   code: String(randomInt(100000, 1000000)),
   expiresAt: new Date(Date.now() + CODE_EXPIRATION_MINUTES * 60 * 1000),
@@ -12,20 +35,7 @@ export const hashEmailVerificationCode = (code) =>
   createHash('sha256').update(code).digest('hex');
 
 export const sendEmailVerificationCode = async (email, code) => {
-  const {
-    SMTP_HOST = 'smtp.gmail.com',
-    SMTP_PORT = '465',
-    SMTP_SECURE = 'true',
-    SMTP_USER,
-    SMTP_PASS,
-    EMAIL_FROM = SMTP_USER,
-  } = process.env;
-
-  const missingSettings = [
-    !SMTP_USER && 'SMTP_USER',
-    !SMTP_PASS && 'SMTP_PASS',
-    !EMAIL_FROM && 'EMAIL_FROM (or SMTP_USER)',
-  ].filter(Boolean);
+  const { settings, missingSettings } = getEmailSettings();
 
   if (missingSettings.length) {
     throw new Error(
@@ -35,18 +45,18 @@ export const sendEmailVerificationCode = async (email, code) => {
   }
 
   const transporter = nodemailer.createTransport({
-    host: SMTP_HOST,
-    port: Number(SMTP_PORT),
-    secure: SMTP_SECURE.toLowerCase() === 'true',
+    host: settings.SMTP_HOST,
+    port: settings.SMTP_PORT,
+    secure: settings.SMTP_SECURE,
     auth: {
-      user: SMTP_USER,
-      pass: SMTP_PASS,
+      user: settings.SMTP_USER,
+      pass: settings.SMTP_PASS,
     },
   });
 
   try {
     await transporter.sendMail({
-      from: EMAIL_FROM,
+      from: settings.EMAIL_FROM,
       to: email,
       subject: 'Your Workzen verification code',
       text: `Your Workzen verification code is ${code}. It expires in ${CODE_EXPIRATION_MINUTES} minutes.`,

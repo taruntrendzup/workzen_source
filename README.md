@@ -133,12 +133,12 @@ SMTP_PORT=465
 SMTP_SECURE=true
 SMTP_USER=your-gmail-address@gmail.com
 SMTP_PASS=your-16-character-app-password
-EMAIL_FROM=your-gmail-address@gmail.com
+EMAIL_FROM="Workzen <your-gmail-address@gmail.com>"
 ```
 
-`SMTP_USER` and `SMTP_PASS` are required. `EMAIL_FROM` is optional and defaults to `SMTP_USER`. Enable 2-Step Verification on the Google account, then create an App Password in your Google Account security settings. Use the generated App Password, not your normal Gmail password.
+`SMTP_USER` and `SMTP_PASS` are required. `EMAIL_FROM` is optional and defaults to `SMTP_USER`; if set, use the same address as `SMTP_USER` or a sender alias authorized by Gmail. Enable 2-Step Verification on the Google account, then create an App Password in your Google Account security settings. Use the generated App Password, not your normal Gmail password. Spaces in the App Password are removed automatically.
 
-For a hosted deployment, add these variables to the **backend service's** environment-variable settings; a local `server/.env` file is not automatically available on the live server. Set `SMTP_USER` and `SMTP_PASS` (and optionally `EMAIL_FROM`), then restart or redeploy the backend. Keep credentials out of source control. Use **Send a new code** to retry after configuration. Verification codes expire after 10 minutes. Existing accounts remain verified.
+For a hosted deployment, add these variables to the **backend service's** environment-variable settings; a local `server/.env` file is not automatically available on the live server. Set `SMTP_USER` and `SMTP_PASS` (and optionally `EMAIL_FROM`), then restart or redeploy the backend. Check `/api/health`: `emailVerificationConfigured` must be `true`. Keep credentials out of source control. Use **Send a new code** to retry after configuration. Verification codes expire after 10 minutes. Existing accounts remain verified.
 
 ### 1. Prerequisites
 - Node.js (v22.12+)
