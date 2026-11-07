@@ -29,7 +29,8 @@ export const sendEmailVerificationCode = async (email, code) => {
 
   if (missingSettings.length) {
     throw new Error(
-      `Email verification is not configured. Set ${missingSettings.join(' and ')} in server/.env, then restart the backend.`
+      `Email verification is not configured. Set ${missingSettings.join(' and ')} in the backend environment. ` +
+      'For local development, use server/.env; for a hosted deployment, set them in the backend service settings and restart or redeploy.'
     );
   }
 

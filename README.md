@@ -125,7 +125,7 @@ Tarun Dashboard/
 ## 💻 How to Run Locally
 
 ### Email verification setup
-New registrations require a six-digit email verification code sent over Gmail SMTP using an App Password. Add the following to `server/.env`:
+New registrations require a six-digit email verification code sent over Gmail SMTP using an App Password. For local development, add the following to `server/.env`:
 
 ```env
 SMTP_HOST=smtp.gmail.com
@@ -133,10 +133,12 @@ SMTP_PORT=465
 SMTP_SECURE=true
 SMTP_USER=your-gmail-address@gmail.com
 SMTP_PASS=your-16-character-app-password
-EMAIL_FROM="Workzen <your-gmail-address@gmail.com>"
+EMAIL_FROM=your-gmail-address@gmail.com
 ```
 
-Enable 2-Step Verification on the Google account, then create an App Password in your Google Account security settings. Use the generated App Password, not your normal Gmail password. Keep it only in the ignored `server/.env` file and never commit or share it. The backend loads `server/.env` regardless of the directory you use to start it. Restart the backend after changing settings. Use **Send a new code** to retry after configuration. Verification codes expire after 10 minutes. Existing accounts remain verified.
+`SMTP_USER` and `SMTP_PASS` are required. `EMAIL_FROM` is optional and defaults to `SMTP_USER`. Enable 2-Step Verification on the Google account, then create an App Password in your Google Account security settings. Use the generated App Password, not your normal Gmail password.
+
+For a hosted deployment, add these variables to the **backend service's** environment-variable settings; a local `server/.env` file is not automatically available on the live server. Set `SMTP_USER` and `SMTP_PASS` (and optionally `EMAIL_FROM`), then restart or redeploy the backend. Keep credentials out of source control. Use **Send a new code** to retry after configuration. Verification codes expire after 10 minutes. Existing accounts remain verified.
 
 ### 1. Prerequisites
 - Node.js (v22.12+)
